@@ -22,6 +22,12 @@ git clone git@github.com:snowzurfer/geepeetto.git
 pip install openai
 ```
 
+## Demo
+
+https://user-images.githubusercontent.com/6337894/231356028-9d04da22-263f-464b-867f-1f393e9a4d5a.mp4
+
+
+
 ## Usage
 
 ```bash
