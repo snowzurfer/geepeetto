@@ -1,0 +1,10 @@
+* French - fr
+* Canadian French - fr-CA
+* German - de
+* Italian - it
+* Malay - ms
+* Brazilian Portuguese - pt-BR
+* Portugal Portuguese - pt-PT 
+* Spanish - es
+* Latin American Spanish - es-419
+* Chinese (Simplified) - zh-Hans

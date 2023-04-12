@@ -1,0 +1,17 @@
+Translate the following strings (contained below the -- marker),  which come from a Localizable.strings file for an iOS app, to the following languages:
+{languages}
+
+When translating, don’t translate directly: instead, translate in a way that’s appropriate for usage of these strings in a modern iOS app. Use your best judgment.  
+{extra_information}
+
+For each language, output the strings for that language using the following format:  
+```  
+// it  
+“LocalizableStringKey” = “LocalizedStringInItalian”;  
+// fr  
+“LocalizableStringKey” = “LocalizedStringInFrench”;  
+…  
+```  
+etc.
+--
+{strings}
