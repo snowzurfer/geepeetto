@@ -66,6 +66,7 @@ def main(
     languages_file: str,
     template_file: str,
     extra_information: str,
+    model: str,
 ):
     openai.api_key = openai_api_key
 
@@ -98,7 +99,7 @@ def main(
     while response["choices"][0]["finish_reason"] != "stop":
         print("Prompting OpenAI to generate translations...")
         response = openai.ChatCompletion.create(
-            model="gpt-4",
+            model=model,
             messages=messages,
         )
         print(f"Complete, finish reason: {response['choices'][0]['finish_reason']}")
@@ -122,7 +123,7 @@ def main(
         print("Error: No translations were generated.")
         sys.exit(1)
 
-    print("Translations generated.")
+    print("\nTranslations generated.\n")
 
     # Write translations to a file in case we need to debug them
     # or just have a copy.
@@ -130,7 +131,7 @@ def main(
     with open("translations.txt", "w") as f:
         f.write(translations)
 
-    print("Successfully wrote translations to translations.txt")
+    print("Successfully wrote translations to translations.txt\n")
 
     # Parse the translations
     localizations = parse_localization_string_file("translations.txt")
@@ -170,6 +171,11 @@ if __name__ == "__main__":
         "--template-file",
         help="Path to the template file. Defaults to ./chatgpt_template.txt.",
         default="chatgpt_template.txt",
+    )
+    parser.add_argument(
+        "--model",
+        help="The OpenAI model to use. Defaults to gpt-4.",
+        default="gpt-4",
     )
 
     args = parser.parse_args()
@@ -213,4 +219,5 @@ if __name__ == "__main__":
         languages_file=args.languages_file,
         template_file=args.template_file,
         extra_information=args.extra_information,
+        model=args.model,
     )
