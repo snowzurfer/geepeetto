@@ -1,11 +1,11 @@
 # Geepeetto
 
-Geepeetto is a Python script that automates the process of localizing iOS apps. It uses OpenAI GPT-4 to generate translations of given strings into a list of languages, and then copies the localized strings into the appropriate .lproj folders of your Xcode project.
+Geepeetto is a Python script that automates the process of localizing iOS apps. It uses OpenAI ChatGPT to generate translations of given strings into a list of languages, and then copies the localized strings into the appropriate .lproj folders of your Xcode project.
 
 ## Requirements
 
 * Python 3.6 or higher
-* OpenAI Python library (<https://github.com/openai/openai>)
+* OpenAI Python library (<https://github.com/openai/openai-python>)
 * An OpenAI API Key
 
 ## Installation
@@ -13,7 +13,7 @@ Geepeetto is a Python script that automates the process of localizing iOS apps. 
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/geepeetto.git
+git clone git@github.com:snowzurfer/geepeetto.git
 ```
 
 2. Install the OpenAI Python library:
@@ -41,6 +41,7 @@ The first time you run the script, **provide the OpenAI API key via the `--opena
 * `--languages-file`: Path to the file containing the list of languages to translate to. Defaults to `./languages_list.txt`.
 * `--extra-information`: Extra information to include in the instructions.
 * `--template-file`: Path to the template file. Defaults to `./chatgpt_template.txt`.
+* `--model`: The OpenAI model to use. Defaults to `gpt-4`.
 
 ## Input Files
 
@@ -57,6 +58,9 @@ Example:
 ```bash
 "AccountView.SubscriptionSection.RedeemCode" = "Redeem code";
 ```
+
+The recommended usage is to localize strings while you develop your app, as you go, rather than translating them
+all in one chunk, but it should work in that case too.
 
 ### Languages List File
 
@@ -85,7 +89,7 @@ Make sure to use the language code for each language the way that Apple expects 
 python geepeetto.py input_strings.txt MyProject/Assets --openai-key your_openai_api_key --languages-file languages_list.txt --extra-information "When translating, don't translate the words Superstar, Maccio, or Catapult since they are the App's main words."
 ```
 
-After running the script, the generated translations will be written to translations.txt, and the localized strings will be copied to the appropriate .lproj folders in the specified Xcode project's assets folder.
+After running the script, the generated translations will be written to `translations.txt`, and the localized strings will be copied to the appropriate `.lproj` folders in the specified Xcode project's assets folder.
 
 ## Authors
 
