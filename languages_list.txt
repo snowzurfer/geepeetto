@@ -8,3 +8,4 @@
 * Spanish - es
 * Latin American Spanish - es-419
 * Chinese (Simplified) - zh-Hans
+* Hindi - hi
