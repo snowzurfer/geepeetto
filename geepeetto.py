@@ -67,6 +67,7 @@ def main(
     template_file: str,
     extra_information: str,
     model: str,
+    translations_output: str,
 ):
     openai.api_key = openai_api_key
 
@@ -127,14 +128,14 @@ def main(
 
     # Write translations to a file in case we need to debug them
     # or just have a copy.
-    print("Writing translations to translations.txt...")
-    with open("translations.txt", "w") as f:
+    print(f"Writing translations to {translations_output}...")
+    with open(translations_output, "w") as f:
         f.write(translations)
 
-    print("Successfully wrote translations to translations.txt\n")
+    print(f"Successfully wrote translations to {translations_output}\n")
 
     # Parse the translations
-    localizations = parse_localization_string_file("translations.txt")
+    localizations = parse_localization_string_file(translations_output)
 
     print("Copying localization strings to the Xcode project...")
     copy_localizations_to_xcode_project(localizations, assets_folder)
@@ -176,6 +177,11 @@ if __name__ == "__main__":
         "--model",
         help="The OpenAI model to use. Defaults to gpt-4.",
         default="gpt-4",
+    )
+    parser.add_argument(
+        "--translations-output",
+        help="Path to the file where translations will be written. Defaults to ./translations.txt.",
+        default="translations.txt",
     )
 
     args = parser.parse_args()
@@ -220,4 +226,5 @@ if __name__ == "__main__":
         template_file=args.template_file,
         extra_information=args.extra_information,
         model=args.model,
+        translations_output=args.translations_output,
     )
