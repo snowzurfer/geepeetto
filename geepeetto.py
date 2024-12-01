@@ -6,6 +6,9 @@ from typing import Optional
 from openai import OpenAI
 import codecs
 
+# Add new constant for Grok base URL
+GROK_BASE_URL = "https://api.x.ai/v1"
+
 
 def parse_localization_string_file(file_path):
     localizations = {}
@@ -62,15 +65,21 @@ def copy_localizations_to_xcode_project(localizations, assets_folder):
 def main(
     input_file: str,
     assets_folder: str,
-    openai_api_key: Optional[str],
+    api_key: Optional[str],
     languages_file: str,
     template_file: str,
     extra_information: str,
     model: str,
     translations_output: str,
 ):
-    # Initialize new OpenAI client
-    client = OpenAI(api_key=openai_api_key)
+    # Initialize client based on model type
+    if model == "grok-beta":
+        client = OpenAI(
+            api_key=api_key,
+            base_url=GROK_BASE_URL
+        )
+    else:
+        client = OpenAI(api_key=api_key)
 
     # Generate the localization instructions
     localization_instructions = generate_localization_instructions(
@@ -131,8 +140,8 @@ if __name__ == "__main__":
     )
     # Optional arguments
     parser.add_argument(
-        "--openai-key",
-        help="API key for OpenAI. If not provided, the script will use the key you provided before.",
+        "--api-key",
+        help="API key for the OpenAI-compatible model. If not provided, the script will use the key you provided before.",
     )
     parser.add_argument(
         "--languages-file",
@@ -151,7 +160,7 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--model",
-        help="The OpenAI model to use. Defaults to gpt-4.",
+        help="The model to use. Use 'gpt-4' for OpenAI or 'grok-beta' for Grok. Defaults to gpt-4.",
         default="gpt-4",
     )
     parser.add_argument(
@@ -178,26 +187,26 @@ if __name__ == "__main__":
         print(f"Error: {args.template_file} is not a valid file")
         sys.exit(1)
 
-    # Write the OpenAI API key to a file, .key
-    if args.openai_key:
+    # Write the API key to a file, .key
+    if args.api_key:
         with open(".key", "w") as f:
-            f.write(args.openai_key)
-            print("Successfully wrote the OpenAI API key to .key")
+            f.write(args.api_key)
+            print("Successfully wrote the API key to .key")
 
-        openai_api_key = args.openai_key
+        api_key = args.api_key
     else:
-        print("No OpenAI API key provided. Using the key you provided before.")
+        print("No API key provided. Using the key you provided before.")
         with open(".key", "r") as f:
-            openai_api_key = f.read()
+            api_key = f.read()
 
-    if not openai_api_key:
-        print("Error: No OpenAI API key provided.")
+    if not api_key:
+        print("Error: No API key provided.")
         sys.exit(1)
 
     main(
         input_file=args.input_file,
         assets_folder=args.assets_folder,
-        openai_api_key=openai_api_key,
+        api_key=api_key,
         languages_file=args.languages_file,
         template_file=args.template_file,
         extra_information=args.extra_information,
