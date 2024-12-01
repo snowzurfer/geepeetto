@@ -3,7 +3,7 @@ import sys
 import re
 import argparse
 from typing import Optional
-import openai
+from openai import OpenAI
 import codecs
 
 
@@ -69,7 +69,8 @@ def main(
     model: str,
     translations_output: str,
 ):
-    openai.api_key = openai_api_key
+    # Initialize new OpenAI client
+    client = OpenAI(api_key=openai_api_key)
 
     # Generate the localization instructions
     localization_instructions = generate_localization_instructions(
@@ -87,40 +88,15 @@ def main(
         {"role": "user", "content": localization_instructions},
     ]
 
-    response = {
-        "choices": [
-            {
-                "finish_reason": None,
-            }
-        ]
-    }
+    # Updated API call
+    response = client.chat.completions.create(
+        model=model,
+        messages=messages,
+    )
+    
+    translations = response.choices[0].message.content
 
-    translations = ""
-
-    while response["choices"][0]["finish_reason"] != "stop":
-        print("Prompting OpenAI to generate translations...")
-        response = openai.ChatCompletion.create(
-            model=model,
-            messages=messages,
-        )
-        print(f"Complete, finish reason: {response['choices'][0]['finish_reason']}")
-
-        translations += response["choices"][0]["message"]["content"]
-
-        messages.append(
-            {
-                "role": response["choices"][0]["message"]["role"],
-                "content": response["choices"][0]["message"]["content"],
-            }
-        )
-        messages.append(
-            {
-                "role": "user",
-                "content": "continue translating",
-            },
-        )
-
-    if translations == "":
+    if not translations:
         print("Error: No translations were generated.")
         sys.exit(1)
 
